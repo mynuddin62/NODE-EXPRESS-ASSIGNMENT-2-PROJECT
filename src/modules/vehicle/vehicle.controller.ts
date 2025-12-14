@@ -11,6 +11,7 @@ const createVehicle = async (req: Request, res: Response) => {
       data: result.rows[0],
     });
   } catch (err: any) {
+    console.log(err);
     err.statusCode ??= 500;
     res.status(err.statusCode).json({
       success: false,
@@ -23,7 +24,8 @@ const createVehicle = async (req: Request, res: Response) => {
 const getVehicles = async (req: Request, res: Response) => {
   try {
     const vehicles = await vehicleServices.getVehicles();
- 
+    console.log(vehicles);
+    
     if(!vehicles.length) {
       res.status(200).json({
       success: true,
@@ -89,7 +91,7 @@ const deleteVehicle = async (req: Request, res: Response) => {
   try {
     const result = await vehicleServices.deleteVehicle(req.params.vehicleId!);
 
-    if (result.rowCount === 0) {
+    if (!result || !result.rowCount) {
       res.status(404).json({
         success: false,
         message: "Vehicle not found",
