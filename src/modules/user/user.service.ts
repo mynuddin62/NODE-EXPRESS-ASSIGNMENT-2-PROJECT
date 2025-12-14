@@ -127,6 +127,18 @@ const updateUser = async (id: string, payload: Record<string, string>, user: any
 };
 
 const deleteUser = async (id: string) => {
+   const activeBookingByUserId = await pool.query(`
+    select * 
+    from bookings 
+    where customer_id = $1 
+    and status = 'active'
+    limit 1`, [id])
+  
+  if(activeBookingByUserId.rowCount) {
+    new CustomError(`Active booking found for id : ${id}`, 400, 'invalid_user_id');
+    return;
+  }
+
   const result = await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
   return result;
 };

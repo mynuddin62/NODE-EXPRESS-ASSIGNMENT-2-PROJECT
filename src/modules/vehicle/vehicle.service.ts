@@ -148,6 +148,19 @@ const updateVehicle  = async (id: string, payload: Record<string, string>) => {
 };
 
 const deleteVehicle = async (id: string) => {
+
+  const activeBookingByVehicleId = await pool.query(`
+    select * 
+    from bookings 
+    where vehicle_id = $1 
+    and status = 'active'
+    limit 1`, [id])
+  
+  if(activeBookingByVehicleId.rowCount) {
+    new CustomError(`Active booking found for id : ${id}`, 400, 'invalid_vehicle_id');
+    return;
+  }
+
   const result = await pool.query(`DELETE FROM vehicles WHERE id = $1`, [id]);
   return result;
 };
