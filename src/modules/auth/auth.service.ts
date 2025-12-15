@@ -63,8 +63,10 @@ const signupUser = async (payload: Record<string, string>) => {
     throw new CustomError("Password should be minimum 6 characters", 400, 'INVALID_PASSWORD');
   }
 
-  const emailQuery = `SELECT * FROM users where email = ${email}`
-  const emailResult = await pool.query(emailQuery)
+  
+
+  const emailQuery = `SELECT * FROM users where email = `
+  const emailResult = await pool.query(emailQuery + `$1`, [email])
   
   if(emailResult.rowCount && emailResult.rowCount > 0){
     throw new CustomError("Email should be unique", 400, 'INVALID_EMAIL');

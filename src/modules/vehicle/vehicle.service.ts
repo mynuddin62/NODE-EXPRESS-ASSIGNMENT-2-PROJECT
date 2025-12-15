@@ -10,24 +10,12 @@ const createVehicle = async (payload: Record<string, string>) => {
   }
 
   const price = Number(daily_rent_price)
-
   if(Number.isNaN(price) || price <= 0){
     throw new CustomError("daily_rent_price is not positive", 400, 'invalid_daily_rent_price');
   }
 
   if (!vehicle_name || typeof vehicle_name !== 'string') {
     throw new CustomError("vehicle_name is required", 400, 'Invalid_vehicle_name');
-  }
-
-  if (!registration_number) {
-    throw new CustomError("registration_number is required", 400, 'invalid_registration_number');
-  }else {
-    const registrationFinderQuery = `SELECT * FROM vehicles where registration_number = ${registration_number}`
-    const regResult = await pool.query(registrationFinderQuery)
-  
-    if(regResult.rowCount && regResult.rowCount > 0){
-      throw new CustomError("Registration number should be unique", 400, 'invalid_registration_number');
-    } 
   }
 
   if (!type || typeof type !== 'string') {
@@ -38,14 +26,23 @@ const createVehicle = async (payload: Record<string, string>) => {
     throw new CustomError("type is out of scope", 400, 'invalid_type');
   }
   
-  
-
-   if (!availability_status || typeof availability_status !== 'string') {
+  if (!availability_status || typeof availability_status !== 'string') {
     throw new CustomError("availability_status is required", 400, 'invalid_availability_status');
   }
 
   if (!['available', 'booked'].includes(availability_status)) {
-    throw new CustomError("invalid_availability_status is out of scope", 400, 'invalid_availability_status');
+    throw new CustomError("availability_status is out of scope", 400, 'invalid_availability_status');
+  }
+
+  if (!registration_number) {
+    throw new CustomError("registration_number is required", 400, 'invalid_registration_number');
+  }else {
+    const registrationFinderQuery = `SELECT * FROM vehicles where registration_number = `
+    const regResult = await pool.query(registrationFinderQuery + `$1`, [registration_number])
+  
+    if(regResult.rowCount && regResult.rowCount > 0){
+      throw new CustomError("Registration number should be unique", 400, 'invalid_registration_number');
+    } 
   }
 
   const result = await pool.query(
@@ -87,8 +84,8 @@ const updateVehicle  = async (id: string, payload: Record<string, string>) => {
 
   if(registration_number && existingVehicle.registration_number !== registration_number) {
     //checking for unique ...
-    const registrationFinderQuery = `SELECT * FROM vehicles where registration_number = ${registration_number}`
-    const regResult = await pool.query(registrationFinderQuery)
+    const registrationFinderQuery = `SELECT * FROM vehicles where registration_number = `
+    const regResult = await pool.query(registrationFinderQuery + `$1`, [registration_number])
   
     if(regResult.rowCount && regResult.rowCount > 0){
       throw new CustomError("Registration number should be unique", 400, 'invalid_registration_number');

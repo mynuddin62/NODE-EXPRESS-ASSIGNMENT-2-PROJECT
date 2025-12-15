@@ -3,6 +3,7 @@ import CustomError from "../../error/customError";
 import { hasUpperCase } from "../../utils/stringUtils";
 import bcrypt from "bcryptjs";
 import { UserResponse } from "./userResponse";
+import { log } from "console";
 
 const getUser = async () => {
   const result = await pool.query(`SELECT * FROM users`);
@@ -48,7 +49,7 @@ const updateUser = async (id: string, payload: Record<string, string>, user: any
   //customer can not change role to admin ...
   if(role && role === 'admin' && user.role !== 'admin') {
     throw new CustomError(
-      "Access forbidden. Insufficient permissions.",
+      "Access forbidden. Insufficient permissions. customer can not change to admin",
       403,
       "FORBIDDEN"
     );
@@ -91,8 +92,8 @@ const updateUser = async (id: string, payload: Record<string, string>, user: any
       throw new CustomError("Email should be in lower case", 400, 'INVALID_EMAIL');
     }
 
-    const emailQuery = `SELECT * FROM users where email = ${email}`
-    const emailResult = await pool.query(emailQuery)
+    const emailQuery = `SELECT * FROM users where email = `
+    const emailResult = await pool.query(emailQuery + `$1`, [email])
   
     if(emailResult.rowCount && emailResult.rowCount > 0){
       throw new CustomError("Email should be unique", 400, 'INVALID_EMAIL');
@@ -140,6 +141,7 @@ const deleteUser = async (id: string) => {
   }
 
   const result = await pool.query(`DELETE FROM users WHERE id = $1`, [id]);
+
   return result;
 };
 
