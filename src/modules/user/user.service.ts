@@ -3,7 +3,7 @@ import CustomError from "../../error/customError";
 import { hasUpperCase } from "../../utils/stringUtils";
 import bcrypt from "bcryptjs";
 import { UserResponse } from "./userResponse";
-import { log } from "console";
+
 
 const getUser = async () => {
   const result = await pool.query(`SELECT * FROM users`);
