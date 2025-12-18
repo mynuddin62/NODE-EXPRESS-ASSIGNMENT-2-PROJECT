@@ -2,7 +2,7 @@
 
   A robust backend (REST API) for administering a vehicle rental system with secure authentication, role-based authorization, and complete booking lifecycle management.
 
-  [**API Base URL**](https://rental-system-backend.vercel.app)
+  [**API Live URL**](https://rental-system-backend.vercel.app)
 
   __**https://rental-system-backend.vercel.app**__
 
@@ -80,14 +80,12 @@
   ### 📥 1. Clone the Repository 
   ```
     git clone https://github.com/mynuddin62/NODE-EXPRESS-ASSIGNMENT-2-PROJECT
-
   ```
 
   ### 📦 2. Install Dependencies 
 
   ``` 
   npm install
-
   ```
   ### 🔐 3. Environment Configuration
 
@@ -96,7 +94,6 @@
   PORT=5000
   DATABASE_URL=postgresql://<username>:<password>@localhost:5432/vehicle_rental
   JWT_SECRET=your_secret_key
-
   ```
 
   ### ▶️ 4. Run the Application
@@ -105,7 +102,6 @@
 
   ```
   npm run dev
-
   ```
 
   ##### Production Mode
@@ -113,7 +109,6 @@
   ```
   npm run build
   npm start
-
   ```
 
   ### 🌐 API Endpoints
