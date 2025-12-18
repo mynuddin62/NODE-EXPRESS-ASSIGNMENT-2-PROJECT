@@ -1,8 +1,8 @@
 users
 
 {
-  "email": "super.admin@company.com",
-  "password": "sadmin"
+  "email": "super@admin.ok",
+  "password": "123-23"
 }
 
 {
@@ -29,3 +29,7 @@ users
   "email": "com@com.com",
   "password": "kas2mr"
 }
+
+
+GitHub Repo: https://github.com/mynuddin62/NODE-EXPRESS-BACKEND-PROJECT
+Live Deployment: https://rental-system-backend.vercel.app
